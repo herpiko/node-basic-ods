@@ -1,6 +1,6 @@
 {
   "name": "node-basic-ods",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "An utility to convert an array of object to Open Document Spreadsheet file.",
   "main": "index.js",
   "scripts": {
