@@ -19,7 +19,7 @@ var odsXML = "";
 // - toFileSync()
 // - use key as column header
 
-var convert = function(arr, path){
+var convert = function(arr, path, done){
   async.each(arr, function(item, cb){
     odsXML += odsTemplateRowStart;
     for (var key in item) {
@@ -29,22 +29,22 @@ var convert = function(arr, path){
     cb();
   }, function(err){
     var tmpDir = randomstring.generate(7);
-    fs.copy(__dirname + "/template", "tmp/" + tmpDir, function(){
-      fs.writeFile("tmp/"+tmpDir+"/xml/contentRow.xml", odsXML, function(err){
+    var templateDir = __dirname + "/template";
+    console.log(templateDir);
+    fs.copy(templateDir, __dirname + "/tmp/" + tmpDir, function(err){
+      console.log("copy : " +err);
+      fs.writeFile(__dirname + "/tmp/"+tmpDir+"/xml/contentRow.xml", odsXML, function(err){
         concat([
-          "tmp/" + tmpDir + "/xml/contentHeader.xml",
-          "tmp/" + tmpDir + "/xml/contentRow.xml",
-          "tmp/" + tmpDir + "/xml/contentFooter.xml"
-        ], "tmp/" + tmpDir + "/unzipped/content.xml", function(){
-          fs.remove("tmp/" + tmpDir + "/xml", function(){
+          __dirname + "/tmp/" + tmpDir + "/xml/contentHeader.xml",
+          __dirname + "/tmp/" + tmpDir + "/xml/contentRow.xml",
+          __dirname + "/tmp/" + tmpDir + "/xml/contentFooter.xml"
+        ], __dirname + "/tmp/" + tmpDir + "/unzipped/content.xml", function(){
+          fs.remove(__dirname + "/tmp/" + tmpDir + "/xml", function(){
             var zipper = new zip();
-            zipper.addLocalFolder("tmp/" + tmpDir + "/unzipped");
-            if (path) {
-              zipper.writeZip(path);
-            } else {
-              return zipper.toBuffer();
-            }
-              fs.remove(__dirname + "/tmp/" + tmpDir);
+            zipper.addLocalFolder(__dirname + "/tmp/" + tmpDir + "/unzipped");
+            var buffer =  zipper.toBuffer();
+            fs.remove(__dirname + "/tmp/" + tmpDir);
+            done(buffer);
           });
         })
         if (err) return console.log(err); 
@@ -53,14 +53,12 @@ var convert = function(arr, path){
   })
 }
 
-var toBuffer = function(arr){
-  return convert(arr, null);
+var toBuffer = function(arr, callback){
+  convert(arr, null, function(buffer){
+    console.log(buffer);
+    callback(buffer);
+  });
 }
-var toFile = function(arr, path){
-  return convert(arr, path);
-}
-
 module.exports = {
   toBuffer: toBuffer,
-  toFile: toFile
 }
