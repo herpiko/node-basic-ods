@@ -30,9 +30,7 @@ var convert = function(arr, path, done){
   }, function(err){
     var tmpDir = randomstring.generate(7);
     var templateDir = __dirname + "/template";
-    console.log(templateDir);
     fs.copy(templateDir, __dirname + "/tmp/" + tmpDir, function(err){
-      console.log("copy : " +err);
       fs.writeFile(__dirname + "/tmp/"+tmpDir+"/xml/contentRow.xml", odsXML, function(err){
         concat([
           __dirname + "/tmp/" + tmpDir + "/xml/contentHeader.xml",
@@ -55,7 +53,6 @@ var convert = function(arr, path, done){
 
 var toBuffer = function(arr, callback){
   convert(arr, null, function(buffer){
-    console.log(buffer);
     callback(buffer);
   });
 }
