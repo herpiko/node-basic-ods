@@ -15,6 +15,7 @@ var odsXML = "";
 
 
 // TODO :
+// - toFile()
 // - toBufferSync()
 // - toFileSync()
 // - use key as column header
@@ -37,13 +38,13 @@ var convert = function(arr, path, done){
           __dirname + "/tmp/" + tmpDir + "/xml/contentRow.xml",
           __dirname + "/tmp/" + tmpDir + "/xml/contentFooter.xml"
         ], __dirname + "/tmp/" + tmpDir + "/unzipped/content.xml", function(){
-          fs.remove(__dirname + "/tmp/" + tmpDir + "/xml", function(){
+          /* fs.remove(__dirname + "/tmp/" + tmpDir + "/xml", function(){ */
             var zipper = new zip();
             zipper.addLocalFolder(__dirname + "/tmp/" + tmpDir + "/unzipped");
             var buffer =  zipper.toBuffer();
-            fs.remove(__dirname + "/tmp/" + tmpDir);
+            /* fs.remove(__dirname + "/tmp/" + tmpDir); */
             done(buffer);
-          });
+          /* }); */
         })
         if (err) return console.log(err); 
       });
