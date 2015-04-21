@@ -12,35 +12,20 @@ var arr = [
   },
 ]
 
+var path = __dirname + "/testFromBuffer.ods";
 
-var path = __dirname + "/test.ods";
-var path2 = __dirname + "/testFromBuffer.ods";
-describe("toFile", function(){
-  before(function(){
-    basicOds.toFile(arr,path);
+describe("toBuffer", function(){
+  after(function(){
+    /* fs.remove(path); */
   });
-  /* after(function(){ */
-  /*   fs.removeSync(path) */
-  /* }); */
-  it("should write an ods file", function(){
-    fs.ensureFileSync(path, function(){
-      should(err).to.not.be.ok;
+  it("should write an ods file from buffer", function(){
+    var buffer = basicOds.toBuffer(arr);
+    console.log(buffer);
+    fs.writeFile(path,buffer, function(){
+      fs.ensureFileSync(path, function(err){
+        console.log(err)
+        should(err).to.be.null;
+      })
     })
   });
 });
-
-/* describe("toBuffer", function(){ */
-/*   /1* after(function(){ *1/ */
-/*   /1*   fs.remove(path); *1/ */
-/*   /1* }); *1/ */
-/*   it("should write an ods file from buffer", function(){ */
-/*     var buffer = basicOds.toBuffer(arr); */
-/*     console.log(buffer); */
-/*     fs.writeFile(path2,buffer, function(){ */
-/*       fs.ensureFileSync(path2, function(err){ */
-/*         console.log(err) */
-/*         should(err).to.be.null; */
-/*       }) */
-/*     }) */
-/*   }); */
-/* }); */
