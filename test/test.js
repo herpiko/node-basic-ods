@@ -15,17 +15,9 @@ var arr = [
 var path = __dirname + "/testFromBuffer.ods";
 
 describe("toBuffer", function(){
-  after(function(){
-    /* fs.remove(path); */
-  });
   it("should write an ods file from buffer", function(){
-    var buffer = basicOds.toBuffer(arr);
-    console.log(buffer);
-    fs.writeFile(path,buffer, function(){
-      fs.ensureFileSync(path, function(err){
-        console.log(err)
-        should(err).to.be.null;
-      })
-    })
+    basicOds.toBuffer(arr, function(buffer){
+      fs.writeFile(path, buffer)
+    });
   });
 });
