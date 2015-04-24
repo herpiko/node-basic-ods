@@ -39,24 +39,22 @@ var convert = function(arr, path, done){
           __dirname + "/template/xml/contentHeader.xml",
           __dirname + "/tmp/" + tmpDir + "/contentRow.xml",
           __dirname + "/template/xml/contentFooter.xml"
-        ], __dirname + "/tmp/" + tmpDir + "/content.xml", function(){
-          fs.remove(__dirname + "/tmp/" + tmpDir + "/xml", function(){
-            var zipper = new JSzip();
-            zipper.file("content.xml", fs.readFileSync(__dirname + "/tmp/" + tmpDir + "/content.xml"));
-            zipper.file("meta.xml", fs.readFileSync(__dirname + "/template/unzipped/meta.xml"));
-            zipper.file("manifest.rdf", fs.readFileSync(__dirname + "/template/unzipped/manifest.rdf"));
-            zipper.file("mimetype", fs.readFileSync(__dirname + "/template/unzipped/mimetype"));
-            zipper.file("settings.xml", fs.readFileSync(__dirname + "/template/unzipped/settings.xml"));
-            zipper.file("styles.xml", fs.readFileSync(__dirname + "/template/unzipped/styles.xml"));
-            zipper.file("META-INF/manifest.xml", fs.readFileSync(__dirname + "/template/unzipped/META-INF/manifest.xml"));
-            zipper.file("styles.xml", fs.readFileSync(__dirname + "/template/unzipped/styles.xml"));
-            zipper.file("Configurations2/accelerator/current.xml", fs.readFileSync(__dirname + "/template/unzipped/Configurations2/accelerator/current.xml"));
-            
-            var base64Str = zipper.generate({type:"base64"});
-            var buffer = new Buffer(base64Str, "base64");
-            done(buffer);
-            fs.remove(__dirname + "/tmp/" + tmpDir);
-          });
+        ], __dirname + "/tmp/" + tmpDir + "/content.xml", function(err){
+          console.log(err);
+          var zipper = new JSzip();
+          zipper.file("content.xml", fs.readFileSync(__dirname + "/tmp/" + tmpDir + "/content.xml"));
+          zipper.file("meta.xml", fs.readFileSync(__dirname + "/template/unzipped/meta.xml"));
+          zipper.file("manifest.rdf", fs.readFileSync(__dirname + "/template/unzipped/manifest.rdf"));
+          zipper.file("mimetype", fs.readFileSync(__dirname + "/template/unzipped/mimetype"));
+          zipper.file("settings.xml", fs.readFileSync(__dirname + "/template/unzipped/settings.xml"));
+          zipper.file("styles.xml", fs.readFileSync(__dirname + "/template/unzipped/styles.xml"));
+          zipper.file("META-INF/manifest.xml", fs.readFileSync(__dirname + "/template/unzipped/META-INF/manifest.xml"));
+          zipper.file("styles.xml", fs.readFileSync(__dirname + "/template/unzipped/styles.xml"));
+          zipper.file("Configurations2/accelerator/current.xml", fs.readFileSync(__dirname + "/template/unzipped/Configurations2/accelerator/current.xml"));
+          
+          var base64Str = zipper.generate({type:"base64"});
+          var buffer = new Buffer(base64Str, "base64");
+          done(buffer);
         })
       });
     })
